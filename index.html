@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ACCESS DENIED</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #c20000;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      cursor: none;
+    }
+
+    #container {
+      transition: opacity 2s ease;
+    }
+
+    #text {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    .word {
+      opacity: 0;
+      transition: opacity 1.4s ease;
+    }
+
+    .word.visible {
+      opacity: 1;
+    }
+
+    #flower {
+      display: none;
+      image-rendering: pixelated;
+      width: 128px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="container">
+    <div id="text"></div>
+    <img id="flower" src="/img/flower.png" alt="">
+  </div>
+
+  <audio autoplay loop>
+    <source src="/audio/access_denied.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const words = [
+      "you..",
+      "you’re",
+      "not",
+      "supposed",
+      "to",
+      "be",
+      "here..",
+      "",
+      "GO",
+      "BACK.",
+      "THIS",
+      "PLACE",
+      "ISN’T",
+      "RIGHT.",
+      "GO",
+      "BACK",
+      "IMMEDIATELY."
+    ];
+
+    const container = document.getElementById("container");
+    const text = document.getElementById("text");
+    const flower = document.getElementById("flower");
+
+    words.forEach((word, index) => {
+      const span = document.createElement("span");
+      span.textContent = word + " ";
+      span.classList.add("word");
+      text.appendChild(span);
+
+      setTimeout(() => {
+        span.classList.add("visible");
+      }, index * 850);
+    });
+
+    const totalTime = words.length * 850 + 1500;
+
+    // Fade out text
+    setTimeout(() => {
+      container.style.opacity = "0";
+    }, totalTime);
+
+    // Show flower
+    setTimeout(() => {
+      text.style.display = "none";
+      flower.style.display = "block";
+      container.style.opacity = "1";
+    }, totalTime + 2500);
+  </script>
+
+</body>
+</html>
