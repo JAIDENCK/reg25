@@ -28,11 +28,16 @@
 
     .word {
       opacity: 0;
-      transition: opacity 1.4s ease;
+      transition: opacity 1s ease;
+      display: inline-block;
     }
 
-    .word.visible {
-      opacity: 1;
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #555;
+      opacity: 0;
+      transition: opacity 2s ease;
     }
 
     #flower {
@@ -40,70 +45,76 @@
       image-rendering: pixelated;
       width: 128px;
       height: auto;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div id="container">
-    <div id="text"></div>
-    <img id="flower" src="/img/flower.png" alt="">
-  </div>
+<div id="container">
+  <div id="text"></div>
+  <img id="flower" src="/img/flower.png" alt="">
+</div>
 
-  <audio autoplay loop>
-    <source src="/audio/access_denied.mp3" type="audio/mpeg">
-  </audio>
+<audio id="bg-audio" autoplay loop>
+  <source src="/audio/access_denied.mp3" type="audio/mpeg">
+</audio>
 
-  <script>
-    const words = [
-      "you..",
-      "you’re",
-      "not",
-      "supposed",
-      "to",
-      "be",
-      "here..",
-      "",
-      "GO",
-      "BACK.",
-      "THIS",
-      "PLACE",
-      "ISN’T",
-      "RIGHT.",
-      "GO",
-      "BACK",
-      "IMMEDIATELY."
-    ];
+<script>
+const words = [
+  "you..",
+  "you’re",
+  "not",
+  "supposed",
+  "to",
+  "be",
+  "here..",
+  "GO",
+  "BACK.",
+  "THIS",
+  "PLACE",
+  "ISN’T",
+  "RIGHT.",
+  "GO",
+  "BACK",
+  "IMMEDIATELY."
+];
 
-    const container = document.getElementById("container");
-    const text = document.getElementById("text");
-    const flower = document.getElementById("flower");
+const textContainer = document.getElementById("text");
+const flower = document.getElementById("flower");
 
-    words.forEach((word, index) => {
-      const span = document.createElement("span");
-      span.textContent = word + " ";
-      span.classList.add("word");
-      text.appendChild(span);
+// Display one word at a time
+let index = 0;
 
-      setTimeout(() => {
-        span.classList.add("visible");
-      }, index * 850);
-    });
-
-    const totalTime = words.length * 850 + 1500;
-
-    // Fade out text
+function showNextWord() {
+  if (index < words.length) {
+    const span = document.createElement("span");
+    span.textContent = words[index] + " ";
+    span.classList.add("word");
+    textContainer.appendChild(span);
+    setTimeout(() => { span.classList.add("visible"); }, 50);
+    index++;
+    setTimeout(showNextWord, 1000); // delay between words
+  } else {
+    // All words done, fade out text
     setTimeout(() => {
-      container.style.opacity = "0";
-    }, totalTime);
-
-    // Show flower
+      textContainer.style.opacity = 0;
+    }, 1200);
+    // Show flower after fade
     setTimeout(() => {
-      text.style.display = "none";
+      textContainer.style.display = "none";
       flower.style.display = "block";
-      container.style.opacity = "1";
-    }, totalTime + 2500);
-  </script>
+    }, 2500);
+  }
+}
+
+// Fix autoplay on browsers
+const audio = document.getElementById("bg-audio");
+audio.volume = 0.3;
+audio.play().catch(() => { console.log("Autoplay blocked, user interaction needed."); });
+
+showNextWord();
+</script>
 
 </body>
 </html>
